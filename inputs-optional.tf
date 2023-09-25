@@ -40,3 +40,9 @@ variable "services_subnet_address_space" {
   type        = list(string)
   default     = null
 }
+
+variable "create_role_assignments" {
+  description = "Whether to create role assignments for the identity, this requires higher privileges. Defaults to true"
+  type        = bool
+  default     = true
+}

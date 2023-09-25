@@ -2,11 +2,12 @@ data "azurerm_subscription" "current" {}
 data "azurerm_client_config" "current" {}
 
 locals {
-  is_prod        = length(regexall(".*(prod).*", var.env)) > 0
-  is_sbox        = length(regexall(".*(s?box).*", var.env)) > 0
-  name           = var.name != null ? var.name : "data-mgmt"
-  resource_group = var.existing_resource_group_name == null ? azurerm_resource_group.new[0].name : data.azurerm_resource_group.existing[0].name
-  location       = var.existing_resource_group_name == null ? azurerm_resource_group.new[0].location : data.azurerm_resource_group.existing[0].location
+  is_prod           = length(regexall(".*(prod).*", var.env)) > 0
+  is_sbox           = length(regexall(".*(s?box).*", var.env)) > 0
+  name              = var.name != null ? var.name : "data-mgmt"
+  resource_group    = var.existing_resource_group_name == null ? azurerm_resource_group.new[0].name : data.azurerm_resource_group.existing[0].name
+  resource_group_id = var.existing_resource_group_name == null ? azurerm_resource_group.new[0].id : data.azurerm_resource_group.existing[0].id
+  location          = var.existing_resource_group_name == null ? azurerm_resource_group.new[0].location : data.azurerm_resource_group.existing[0].location
   subnets = {
     services = {
       address_prefixes  = var.services_subnet_address_space != null ? var.services_subnet_address_space : var.address_space

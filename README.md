@@ -39,11 +39,15 @@ module "todo_resource_name" {
 | [azurerm_network_security_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_security_group) | resource |
 | [azurerm_private_endpoint.kv_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
 | [azurerm_private_endpoint.purview_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
+| [azurerm_private_endpoint.synapse_private_link_hub_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
 | [azurerm_purview_account.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/purview_account) | resource |
 | [azurerm_resource_group.new](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) | resource |
+| [azurerm_role_assignment.name](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_route.default](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/route) | resource |
 | [azurerm_route_table.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/route_table) | resource |
 | [azurerm_subnet.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) | resource |
+| [azurerm_synapse_private_link_hub.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/synapse_private_link_hub) | resource |
+| [azurerm_user_assigned_identity.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) | resource |
 | [azurerm_virtual_network.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) | resource |
 | [azurerm_client_config.current](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) | data source |
 | [azurerm_resource_group.existing](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) | data source |
@@ -56,6 +60,7 @@ module "todo_resource_name" {
 | <a name="input_additional_subnets"></a> [additional\_subnets](#input\_additional\_subnets) | This module by default deploys a 'services' subnet with the address space of the virtual network. If you need additional subnets, you can specify them here. | <pre>map(object({<br>    address_prefixes  = list(string),<br>    service_endpoints = optional(list(string), []),<br>    delegations = optional(map(object({<br>      service_name = string,<br>      actions      = optional(list(string), [])<br>    })))<br>  }))</pre> | `{}` | no |
 | <a name="input_address_space"></a> [address\_space](#input\_address\_space) | The address space covered by the virtual network. | `list(string)` | n/a | yes |
 | <a name="input_common_tags"></a> [common\_tags](#input\_common\_tags) | Common tag to be applied to resources | `map(string)` | n/a | yes |
+| <a name="input_create_role_assignments"></a> [create\_role\_assignments](#input\_create\_role\_assignments) | Whether to create role assignments for the identity, this requires higher privileges. Defaults to true | `bool` | `true` | no |
 | <a name="input_default_route_next_hop_ip"></a> [default\_route\_next\_hop\_ip](#input\_default\_route\_next\_hop\_ip) | IP address of the next hop for the default route, this will usually be the private ip config of the Palo Load Balancer. | `string` | n/a | yes |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS servers to set as the default for the virtual network. | `list(string)` | `[]` | no |
 | <a name="input_env"></a> [env](#input\_env) | Environment value | `string` | n/a | yes |
