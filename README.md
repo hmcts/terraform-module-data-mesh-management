@@ -1,4 +1,4 @@
-# terraform-module-data-mesh-management
+# terraform-module-data-management-zone
 Terraform module for deploying a data management zone to Azure. Based off of [Microsoft's Bicep implementation](https://github.com/Azure/data-management-zone) utilising existing Terraform modules and integrating with shared infrastructure to reduce cost and duplication.
 
 ## Example
@@ -6,7 +6,7 @@ Terraform module for deploying a data management zone to Azure. Based off of [Mi
 _COMING SOON_
 ```hcl
 module "todo_resource_name" {
-  source = "git@github.com:hmcts/terraform-module-todo?ref=main"
+  source = "git@github.com:hmcts/terraform-module-data-management-zone?ref=main"
   ...
 }
 
