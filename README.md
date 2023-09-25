@@ -1,11 +1,9 @@
-# terraform-module-template
-
-<!-- TODO fill in resource name in link to product documentation -->
-Terraform module for [Resource name](https://example.com).
+# terraform-module-data-mesh-management
+Terraform module for deploying a data management zone to Azure. Based off of [Microsoft's Bicep implementation](https://github.com/Azure/data-management-zone) utilising existing Terraform modules and integrating with shared infrastructure to reduce cost and duplication.
 
 ## Example
 
-<!-- todo update module name -->
+_COMING SOON_
 ```hcl
 module "todo_resource_name" {
   source = "git@github.com:hmcts/terraform-module-todo?ref=main"
