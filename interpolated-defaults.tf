@@ -1,6 +1,41 @@
-data "azurerm_subscription" "current" {
-}
+data "azurerm_subscription" "current" {}
+data "azurerm_client_config" "current" {}
 
 locals {
-  name = var.name != "" ? var.name : "data-mgmt-${var.env}"
+  is_prod        = length(regexall(".*(prod).*", var.env)) > 0
+  is_sbox        = length(regexall(".*(s?box).*", var.env)) > 0
+  name           = var.name != null ? var.name : "data-mgmt"
+  resource_group = var.existing_resource_group_name == null ? azurerm_resource_group.new[0].name : data.azurerm_resource_group.existing[0].name
+  location       = var.existing_resource_group_name == null ? azurerm_resource_group.new[0].location : data.azurerm_resource_group.existing[0].location
+  subnets = {
+    services = {
+      address_prefixes  = var.services_subnet_address_space != null ? var.services_subnet_address_space : var.address_space
+      service_endpoints = []
+      delegations       = null
+    }
+  }
+  # TODO: This needs to be created
+  purview_privatelink_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com"
+  purview_private_endpoints = {
+    account = {
+      resource_id         = azurerm_purview_account.this.id
+      private_dns_zone_id = local.purview_privatelink_dns_zone_id
+    }
+    portal = {
+      resource_id         = azurerm_purview_account.this.id
+      private_dns_zone_id = local.purview_privatelink_dns_zone_id
+    }
+    blob = {
+      resource_id         = azurerm_purview_account.this.managed_resources[0].storage_account_id
+      private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
+    }
+    queue = {
+      resource_id         = azurerm_purview_account.this.managed_resources[0].storage_account_id
+      private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net"
+    }
+    namespace = {
+      resource_id         = azurerm_purview_account.this.managed_resources[0].event_hub_namespace_id
+      private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
+    }
+  }
 }

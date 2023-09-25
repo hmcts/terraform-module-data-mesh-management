@@ -7,3 +7,13 @@ variable "common_tags" {
   description = "Common tag to be applied to resources"
   type        = map(string)
 }
+
+variable "default_route_next_hop_ip" {
+  description = "IP address of the next hop for the default route, this will usually be the private ip config of the Palo Load Balancer."
+  type        = string
+}
+
+variable "address_space" {
+  description = "The address space covered by the virtual network."
+  type        = list(string)
+}
