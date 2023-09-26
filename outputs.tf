@@ -29,16 +29,16 @@ output "key_vault_id" {
 }
 
 output "purview_id" {
-  value       = azurerm_purview_account.this.id
+  value       = azurerm_purview_account.this[0].id
   description = "The ID of the purview account deployed for the data managaement zone."
 }
 
 output "purview_managed_storage_id" {
-  value       = azurerm_purview_account.this.managed_resources[0].storage_account_id
+  value       = azurerm_purview_account.this[0].managed_resources[0].storage_account_id
   description = "The ID of the purview managed storage account deployed for the data managaement zone."
 }
 
 output "purview_managed_event_hub_id" {
-  value       = azurerm_purview_account.this.managed_resources[0].event_hub_namespace_id
+  value       = azurerm_purview_account.this[0].managed_resources[0].event_hub_namespace_id
   description = "The ID of the purview managed event hub deployed for the data managaement zone."
 }

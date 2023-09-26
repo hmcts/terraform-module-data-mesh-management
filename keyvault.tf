@@ -32,8 +32,8 @@ resource "azurerm_private_endpoint" "kv_endpoint" {
 
 resource "azurerm_key_vault_access_policy" "purview" {
   key_vault_id = module.key_vault.key_vault_id
-  tenant_id    = azurerm_purview_account.this.identity[0].tenant_id
-  object_id    = azurerm_purview_account.this.identity[0].principal_id
+  tenant_id    = var.existing_purview_account == null ? azurerm_purview_account.this[0].identity[0].tenant_id : var.existing_purview_account.identity.tenant_id
+  object_id    = var.existing_purview_account == null ? azurerm_purview_account.this[0].identity[0].principal_id : var.existing_purview_account.identity.principal_id
 
   secret_permissions = ["Get", "List", "Set", "Delete", "Recover", "Backup", "Restore", "Purge"]
 }
