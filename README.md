@@ -3,13 +3,22 @@ Terraform module for deploying a data management zone to Azure. Based off of [Mi
 
 ## Example
 
-_COMING SOON_
 ```hcl
-module "todo_resource_name" {
-  source = "git@github.com:hmcts/terraform-module-data-management-zone?ref=main"
-  ...
-}
+module "data_mgmt_zone" {
+  source = "../."
 
+  providers = {
+    azurerm     = azurerm,
+    azurerm.hub = azurerm.hub
+  }
+
+  env                       = var.env
+  common_tags               = var.common_tags
+  default_route_next_hop_ip = var.default_route_next_hop_ip
+  address_space             = ["10.100.100.0/24"]
+  hub_vnet_name             = var.hub_vnet_name
+  hub_resource_group_name   = var.hub_resource_group_name
+}
 ```
 
 <!-- BEGIN_TF_DOCS -->
@@ -23,13 +32,14 @@ module "todo_resource_name" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.74.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | >= 3.74.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_key_vault"></a> [key\_vault](#module\_key\_vault) | git@github.com:hmcts/cnp-module-key-vault | master |
+| <a name="module_key_vault"></a> [key\_vault](#module\_key\_vault) | github.com/hmcts/cnp-module-key-vault | master |
+| <a name="module_vnet_peer_hub"></a> [vnet\_peer\_hub](#module\_vnet\_peer\_hub) | github.com/hmcts/terraform-module-vnet-peering | master |
 
 ## Resources
 
@@ -65,6 +75,8 @@ module "todo_resource_name" {
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS servers to set as the default for the virtual network. | `list(string)` | `[]` | no |
 | <a name="input_env"></a> [env](#input\_env) | Environment value | `string` | n/a | yes |
 | <a name="input_existing_resource_group_name"></a> [existing\_resource\_group\_name](#input\_existing\_resource\_group\_name) | Name of existing resource group to deploy resources into | `string` | `null` | no |
+| <a name="input_hub_resource_group_name"></a> [hub\_resource\_group\_name](#input\_hub\_resource\_group\_name) | The name of the resource group containing the HUB virtual network. | `string` | n/a | yes |
+| <a name="input_hub_vnet_name"></a> [hub\_vnet\_name](#input\_hub\_vnet\_name) | The name of the HUB virtual network. | `string` | n/a | yes |
 | <a name="input_location"></a> [location](#input\_location) | Target Azure location to deploy the resource | `string` | `"UK South"` | no |
 | <a name="input_name"></a> [name](#input\_name) | The default name will be data-mgmt+env, you can override the data-mgmt part by setting this | `string` | `null` | no |
 | <a name="input_services_subnet_address_space"></a> [services\_subnet\_address\_space](#input\_services\_subnet\_address\_space) | The address space for the services subnet. This is only used if you are specifying additional subnets. | `list(string)` | `null` | no |
