@@ -32,7 +32,7 @@ resource "azurerm_virtual_network" "this" {
 }
 
 module "vnet_peer_hub" {
-  source = "git@github.com:hmcts/terraform-module-vnet-peering?ref=master"
+  source = "github.com/hmcts/terraform-module-vnet-peering?ref=master"
   peerings = {
     source = {
       name           = "${local.name}-vnet-${var.env}-to-hub"
