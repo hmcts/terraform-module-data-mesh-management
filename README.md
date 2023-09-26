@@ -1,7 +1,7 @@
 # terraform-module-data-management-zone
 Terraform module for deploying a data management zone to Azure. Based off of [Microsoft's Bicep implementation](https://github.com/Azure/data-management-zone) utilising existing Terraform modules and integrating with shared infrastructure to reduce cost and duplication.
 
-## Example
+## Example deploying a new Purview account
 
 ```hcl
 module "data_mgmt_zone" {
@@ -18,6 +18,35 @@ module "data_mgmt_zone" {
   address_space             = ["10.100.100.0/24"]
   hub_vnet_name             = var.hub_vnet_name
   hub_resource_group_name   = var.hub_resource_group_name
+}
+```
+
+## Example deploying referencing an existing Purview account
+
+```hcl
+module "data_mgmt_zone" {
+  source = "../."
+
+  providers = {
+    azurerm     = azurerm,
+    azurerm.hub = azurerm.hub
+  }
+
+  env                       = var.env
+  common_tags               = var.common_tags
+  default_route_next_hop_ip = var.default_route_next_hop_ip
+  address_space             = ["10.100.100.0/24"]
+  hub_vnet_name             = var.hub_vnet_name
+  hub_resource_group_name   = var.hub_resource_group_name
+
+  existing_purview_account = {
+    resource_id                    = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/mi-sbox-rg/providers/Microsoft.Purview/accounts/mi-purview-sbox"
+    managed_storage_account_id     = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/managed-rg-mi-purview-sbox/providers/Microsoft.Storage/storageAccounts/scanuksouthlyehlok"
+    identity = {
+      principal_id = "487b08af-d9de-4ca3-8cbe-7a232a0e8858"
+      tenant_id    = "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+    }
+  }
 }
 ```
 
@@ -74,6 +103,7 @@ module "data_mgmt_zone" {
 | <a name="input_default_route_next_hop_ip"></a> [default\_route\_next\_hop\_ip](#input\_default\_route\_next\_hop\_ip) | IP address of the next hop for the default route, this will usually be the private ip config of the Palo Load Balancer. | `string` | n/a | yes |
 | <a name="input_dns_servers"></a> [dns\_servers](#input\_dns\_servers) | DNS servers to set as the default for the virtual network. | `list(string)` | `[]` | no |
 | <a name="input_env"></a> [env](#input\_env) | Environment value | `string` | n/a | yes |
+| <a name="input_existing_purview_account"></a> [existing\_purview\_account](#input\_existing\_purview\_account) | Details of an existing purview account to use, if not specified a new one will be created. | <pre>object({<br>    resource_id                    = string<br>    managed_storage_account_id     = optional(string)<br>    managed_event_hub_namespace_id = optional(string)<br>    identity = object({<br>      principal_id = string<br>      tenant_id    = string<br>    })<br>  })</pre> | `null` | no |
 | <a name="input_existing_resource_group_name"></a> [existing\_resource\_group\_name](#input\_existing\_resource\_group\_name) | Name of existing resource group to deploy resources into | `string` | `null` | no |
 | <a name="input_hub_resource_group_name"></a> [hub\_resource\_group\_name](#input\_hub\_resource\_group\_name) | The name of the resource group containing the HUB virtual network. | `string` | n/a | yes |
 | <a name="input_hub_vnet_name"></a> [hub\_vnet\_name](#input\_hub\_vnet\_name) | The name of the HUB virtual network. | `string` | n/a | yes |
