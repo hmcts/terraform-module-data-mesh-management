@@ -17,3 +17,13 @@ variable "address_space" {
   description = "The address space covered by the virtual network."
   type        = list(string)
 }
+
+variable "hub_vnet_name" {
+  description = "The name of the HUB virtual network."
+  type        = string
+}
+
+variable "hub_resource_group_name" {
+  description = "The name of the resource group containing the HUB virtual network."
+  type        = string
+}

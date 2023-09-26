@@ -31,6 +31,27 @@ resource "azurerm_virtual_network" "this" {
   tags = var.common_tags
 }
 
+module "vnet_peer_hub" {
+  source = "git@github.com:hmcts/terraform-module-vnet-peering?ref=master"
+  peerings = {
+    source = {
+      name           = "${local.name}-vnet-${var.env}-to-hub"
+      vnet           = azurerm_virtual_network.this.name
+      resource_group = azurerm_virtual_network.this.resource_group_name
+    }
+    target = {
+      name           = "hub-to-${local.name}-vnet-${var.env}"
+      vnet           = var.hub_vnet_name
+      resource_group = var.hub_resource_group_name
+    }
+  }
+
+  providers = {
+    azurerm.initiator = azurerm
+    azurerm.target    = azurerm.hub
+  }
+}
+
 resource "azurerm_subnet" "this" {
   for_each             = merge(local.subnets, var.additional_subnets)
   name                 = each.key
