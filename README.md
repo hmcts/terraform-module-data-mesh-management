@@ -3,13 +3,17 @@ Terraform module for deploying a data management zone to Azure. Based off of [Mi
 
 ## Example
 
-_COMING SOON_
 ```hcl
-module "todo_resource_name" {
-  source = "git@github.com:hmcts/terraform-module-data-management-zone?ref=main"
-  ...
-}
+module "data_mgmt_zone" {
+  source = "../."
 
+  env                       = var.env
+  common_tags               = var.common_tags
+  default_route_next_hop_ip = var.default_route_next_hop_ip
+  address_space             = "10.100.100.0/24"
+  hub_vnet_name             = var.hub_vnet_name
+  hub_resource_group_name   = var.hub_resource_group_name
+}
 ```
 
 <!-- BEGIN_TF_DOCS -->
