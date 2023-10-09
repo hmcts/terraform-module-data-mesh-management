@@ -14,7 +14,29 @@ resource "azurerm_purview_account" "this" {
 }
 
 resource "azurerm_private_endpoint" "purview_endpoint" {
-  for_each            = local.purview_private_endpoints
+  for_each            = var.existing_purview_account == null ? local.purview_private_endpoints : {}
+  name                = "${local.name}-purview-endpoint-${each.key}-${var.env}"
+  location            = local.location
+  resource_group_name = local.resource_group
+  subnet_id           = module.networking.subnet_ids["vnet-services"]
+
+  private_service_connection {
+    name                           = "${local.name}-purview-endpoint-${each.key}-connection-${var.env}"
+    private_connection_resource_id = each.value.resource_id
+    subresource_names              = [each.key]
+    is_manual_connection           = false
+  }
+
+  private_dns_zone_group {
+    name                 = "endpoint-dnszonegroup"
+    private_dns_zone_ids = [each.value.private_dns_zone_id]
+  }
+
+  tags = var.common_tags
+}
+
+resource "azurerm_private_endpoint" "existing_purview_endpoint" {
+  for_each            = var.existing_purview_account != null ? local.exiting_purview_private_endpoints : {}
   name                = "${local.name}-purview-endpoint-${each.key}-${var.env}"
   location            = local.location
   resource_group_name = local.resource_group
