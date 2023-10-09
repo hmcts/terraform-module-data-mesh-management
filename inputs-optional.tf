@@ -53,6 +53,7 @@ variable "existing_purview_account" {
     resource_id                    = string
     managed_storage_account_id     = optional(string)
     managed_event_hub_namespace_id = optional(string)
+    self_hosted_integration_runtime_auth_key = optional(string)
     identity = object({
       principal_id = string
       tenant_id    = string
