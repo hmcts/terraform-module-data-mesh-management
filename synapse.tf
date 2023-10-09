@@ -1,5 +1,5 @@
 resource "azurerm_synapse_private_link_hub" "this" {
-  name                = "${local.name}-synapse-hub-${var.env}"
+  name                = lower(replace("${local.name}synapsehub${var.env}", "-", ""))
   resource_group_name = local.resource_group
   location            = local.location
   tags                = var.common_tags

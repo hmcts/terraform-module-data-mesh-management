@@ -36,8 +36,9 @@ module "vnet_peer_hub" {
   peerings = {
     source = {
       name           = "${local.name}-vnet-${var.env}-to-hub"
-      vnet_id        = "/subscriptions/${data.azurerm_subscription.current.subscription_id}/resourceGroups/${local.resource_group}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.this.name}"
-      resource_group = local.resource_group
+      vnet_id        = "/subscriptions/${data.azurerm_subscription.current.subscription_id}/resourceGroups/${azurerm_virtual_network.this.resource_group_name}/providers/Microsoft.Network/virtualNetworks/${azurerm_virtual_network.this.name}"
+      vnet           = azurerm_virtual_network.this.name
+      resource_group = azurerm_virtual_network.this.resource_group_name
     }
     target = {
       name           = "hub-to-${local.name}-vnet-${var.env}"
