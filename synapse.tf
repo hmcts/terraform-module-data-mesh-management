@@ -9,7 +9,7 @@ resource "azurerm_private_endpoint" "synapse_private_link_hub_endpoint" {
   name                = "${local.name}-synapse-endpoint-${var.env}"
   location            = local.location
   resource_group_name = local.resource_group
-  subnet_id           = module.networking.subnet_ids["services"]
+  subnet_id           = module.networking.subnet_ids["vnet-services"]
 
   private_service_connection {
     name                           = "${local.name}-synapse-endpoint-connection-${var.env}"

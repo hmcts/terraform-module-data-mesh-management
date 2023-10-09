@@ -13,7 +13,7 @@ resource "azurerm_private_endpoint" "kv_endpoint" {
   name                = "${local.name}-kv-endpoint-${var.env}"
   location            = local.location
   resource_group_name = local.resource_group
-  subnet_id           = module.networking.subnet_ids["services"]
+  subnet_id           = module.networking.subnet_ids["vnet-services"]
 
   private_service_connection {
     name                           = "${local.name}-kv-endpoint-connection-${var.env}"

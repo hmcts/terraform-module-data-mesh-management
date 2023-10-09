@@ -18,7 +18,7 @@ resource "azurerm_private_endpoint" "purview_endpoint" {
   name                = "${local.name}-purview-endpoint-${each.key}-${var.env}"
   location            = local.location
   resource_group_name = local.resource_group
-  subnet_id           = module.networking.subnet_ids["services"]
+  subnet_id           = module.networking.subnet_ids["vnet-services"]
 
   private_service_connection {
     name                           = "${local.name}-purview-endpoint-${each.key}-connection-${var.env}"
