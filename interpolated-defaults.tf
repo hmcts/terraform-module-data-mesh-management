@@ -30,16 +30,17 @@ locals {
       private_dns_zone_id = local.purview_privatelink_dns_zone_id
     }
     blob = {
-      resource_id         = var.existing_purview_account != null && var.existing_purview_account.managed_storage_account_id != null ? var.existing_purview_account.managed_storage_account_id : azurerm_purview_account.this[0].managed_resources[0].storage_account_id
+      resource_id         = var.existing_purview_account == null ? azurerm_purview_account.this[0].managed_resources[0].storage_account_id : var.existing_purview_account.managed_storage_account_id
       private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
     }
     queue = {
-      resource_id         = var.existing_purview_account != null && var.existing_purview_account.managed_storage_account_id != null ? var.existing_purview_account.managed_storage_account_id : azurerm_purview_account.this[0].managed_resources[0].storage_account_id
+      resource_id         = var.existing_purview_account == null ? azurerm_purview_account.this[0].managed_resources[0].storage_account_id : var.existing_purview_account.managed_storage_account_id
       private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net"
     }
     namespace = {
-      resource_id         = var.existing_purview_account != null && var.existing_purview_account.managed_event_hub_namespace_id != null ? var.existing_purview_account.managed_event_hub_namespace_id : azurerm_purview_account.this[0].managed_resources[0].event_hub_namespace_id
+      resource_id         = var.existing_purview_account == null ? azurerm_purview_account.this[0].managed_resources[0].event_hub_namespace_id : var.existing_purview_account.managed_event_hub_namespace_id
       private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
     }
   }
+  non_null_purview_private_endpoints = { for key, value in local.purview_private_endpoints : key => value if value.resource_id != null }
 }
