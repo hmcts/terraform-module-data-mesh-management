@@ -12,13 +12,13 @@ module "networking" {
   vnets = {
     vnet = {
       address_space = var.address_space
-      subnets       = merge(local.subnets, var.additional_subnets)
+      subnets       = local.merged_subnets
     }
   }
 
   route_tables = {
     rt = {
-      subnets = keys(merge(local.subnets, var.additional_subnets))
+      subnets = keys(local.merged_subnets)
       routes = {
         default = {
           address_prefix         = "0.0.0.0/0"
@@ -31,7 +31,7 @@ module "networking" {
 
   network_security_groups = {
     nsg = {
-      subnets = keys(merge(local.subnets, var.additional_subnets))
+      subnets = keys(local.merged_subnets)
       rules   = {}
     }
   }
