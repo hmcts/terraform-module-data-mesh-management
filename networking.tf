@@ -32,12 +32,11 @@ resource "azurerm_virtual_network" "this" {
 }
 
 module "vnet_peer_hub" {
-  source = "github.com/hmcts/terraform-module-vnet-peering?ref=master"
+  source = "github.com/hmcts/terraform-module-vnet-peering?ref=feat%2Ftweak-to-enable-planning-in-a-clean-env"
   peerings = {
     source = {
-      name           = "${local.name}-vnet-${var.env}-to-hub"
-      vnet           = azurerm_virtual_network.this.name
-      resource_group = azurerm_virtual_network.this.resource_group_name
+      name    = "${local.name}-vnet-${var.env}-to-hub"
+      vnet_id = azurerm_virtual_network.this.id
     }
     target = {
       name           = "hub-to-${local.name}-vnet-${var.env}"
