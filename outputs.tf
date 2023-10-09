@@ -8,18 +8,18 @@ output "location" {
   description = "The Azure region the data management zone has been deployed to."
 }
 
-output "virtual_network_name" {
-  value       = azurerm_virtual_network.this.name
+output "virtual_network_names" {
+  value       = module.networking.vnet_names
   description = "The name of the virtual network deployed for the data managaement zone."
 }
 
-output "virtual_network_id" {
-  value       = azurerm_virtual_network.this.id
+output "virtual_network_ids" {
+  value       = module.networking.vnet_ids
   description = "The ID of the virtual network deployed for the data managaement zone."
 }
 
 output "subnet_ids" {
-  value       = values(azurerm_subnet.this)[*].id
+  value       = module.networking.subnet_ids
   description = "The IDs of the subnets deployed for the data managaement zone."
 }
 
