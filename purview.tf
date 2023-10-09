@@ -14,7 +14,7 @@ resource "azurerm_purview_account" "this" {
 }
 
 resource "azurerm_private_endpoint" "purview_endpoint" {
-  for_each            = { for key, value in local.purview_private_endpoints : key => value if value.resource_id != null && value.resource_id != "" }
+  for_each            = local.purview_private_endpoints
   name                = "${local.name}-purview-endpoint-${each.key}-${var.env}"
   location            = local.location
   resource_group_name = local.resource_group
