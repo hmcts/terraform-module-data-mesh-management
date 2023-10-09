@@ -16,7 +16,7 @@ locals {
     }
   }
   merged_subnets = merge(local.subnets, var.additional_subnets)
-  subnet_keys = formatlist("vnet-%s", keys(local.merged_subnets))
+  subnet_keys    = formatlist("vnet-%s", keys(local.merged_subnets))
   # TODO: This needs to be created
   purview_privatelink_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com"
   purview_private_endpoints = {
@@ -28,6 +28,9 @@ locals {
       resource_id         = var.existing_purview_account == null ? azurerm_purview_account.this[0].id : var.existing_purview_account.resource_id
       private_dns_zone_id = local.purview_privatelink_dns_zone_id
     }
+  }
+
+  purview_managed_storage_private_endpoints = {
     blob = {
       resource_id         = var.existing_purview_account == null ? azurerm_purview_account.this[0].managed_resources[0].storage_account_id : var.existing_purview_account.managed_storage_account_id
       private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.blob.core.windows.net"
@@ -36,6 +39,9 @@ locals {
       resource_id         = var.existing_purview_account == null ? azurerm_purview_account.this[0].managed_resources[0].storage_account_id : var.existing_purview_account.managed_storage_account_id
       private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.queue.core.windows.net"
     }
+  }
+
+  purview_managed_eventhub_private_endpoints = {
     namespace = {
       resource_id         = var.existing_purview_account == null ? azurerm_purview_account.this[0].managed_resources[0].event_hub_namespace_id : var.existing_purview_account.managed_event_hub_namespace_id
       private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
