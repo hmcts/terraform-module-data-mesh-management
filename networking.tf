@@ -7,7 +7,7 @@ module "networking" {
   component                    = "networking"
   name                         = local.name
   location                     = var.location
-  existing_resource_group_name = azurerm_resource_group.this["network"].name
+  existing_resource_group_name = local.resource_group
 
   vnets = {
     vnet = {
