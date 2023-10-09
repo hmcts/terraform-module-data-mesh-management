@@ -18,7 +18,7 @@ module "networking" {
 
   route_tables = {
     rt = {
-      subnets = keys(local.merged_subnets)
+      subnets = local.subnet_keys
       routes = {
         default = {
           address_prefix         = "0.0.0.0/0"
@@ -31,7 +31,7 @@ module "networking" {
 
   network_security_groups = {
     nsg = {
-      subnets = keys(local.merged_subnets)
+      subnets = local.subnet_keys
       rules   = {}
     }
   }

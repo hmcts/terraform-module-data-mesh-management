@@ -16,6 +16,7 @@ locals {
     }
   }
   merged_subnets = merge(local.subnets, var.additional_subnets)
+  subnet_keys = formatlist("vnet-%s", keys(local.merged_subnets))
   # TODO: This needs to be created
   purview_privatelink_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com"
   purview_private_endpoints = {
