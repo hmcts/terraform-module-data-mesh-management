@@ -29,7 +29,7 @@ output "key_vault_id" {
 }
 
 output "purview_id" {
-  value       = var.existing_purview_account == null ? azurerm_purview_account.this[0].id : var.existing_purview_account
+  value       = var.existing_purview_account == null ? azurerm_purview_account.this[0].id : var.existing_purview_account.resource_id
   description = "The ID of the purview account deployed for the data managaement zone."
 }
 
