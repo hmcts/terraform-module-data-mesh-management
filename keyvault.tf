@@ -1,5 +1,5 @@
 module "key_vault" {
-  source              = "github.com/hmcts/cnp-module-key-vault?ref=master"
+  source              = "github.com/hmcts/cnp-module-key-vault?ref=fix%2Fremove-creator-access-policy"
   name                = "${local.name}-kv-${var.env}"
   product             = "data-mgmt-zone"
   env                 = var.env
@@ -13,7 +13,7 @@ resource "azurerm_private_endpoint" "kv_endpoint" {
   name                = "${local.name}-kv-endpoint-${var.env}"
   location            = local.location
   resource_group_name = local.resource_group
-  subnet_id           = azurerm_subnet.this["services"].id
+  subnet_id           = module.networking.subnet_ids["vnet-services"]
 
   private_service_connection {
     name                           = "${local.name}-kv-endpoint-connection-${var.env}"

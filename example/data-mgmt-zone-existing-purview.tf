@@ -2,8 +2,9 @@ module "data_mgmt_zone_existing_purview" {
   source = "../."
 
   providers = {
-    azurerm     = azurerm,
-    azurerm.hub = azurerm.hub
+    azurerm       = azurerm,
+    azurerm.hub   = azurerm.hub
+    azurerm.ssptl = azurerm.ssptl
   }
 
   env                       = var.env

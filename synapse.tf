@@ -1,5 +1,5 @@
 resource "azurerm_synapse_private_link_hub" "this" {
-  name                = "${local.name}-synapse-hub-${var.env}"
+  name                = lower(replace("${local.name}synapsehub${var.env}", "-", ""))
   resource_group_name = local.resource_group
   location            = local.location
   tags                = var.common_tags
@@ -9,7 +9,7 @@ resource "azurerm_private_endpoint" "synapse_private_link_hub_endpoint" {
   name                = "${local.name}-synapse-endpoint-${var.env}"
   location            = local.location
   resource_group_name = local.resource_group
-  subnet_id           = azurerm_subnet.this["services"].id
+  subnet_id           = module.networking.subnet_ids["vnet-services"]
 
   private_service_connection {
     name                           = "${local.name}-synapse-endpoint-connection-${var.env}"

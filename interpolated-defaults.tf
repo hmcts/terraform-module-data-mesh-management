@@ -15,8 +15,11 @@ locals {
       delegations       = null
     }
   }
+  merged_subnets = merge(local.subnets, var.additional_subnets)
+  subnet_keys    = formatlist("vnet-%s", keys(local.merged_subnets))
   # TODO: This needs to be created
   purview_privatelink_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.purview.azure.com"
+
   purview_private_endpoints = {
     account = {
       resource_id         = var.existing_purview_account == null ? azurerm_purview_account.this[0].id : var.existing_purview_account.resource_id
@@ -39,4 +42,22 @@ locals {
       private_dns_zone_id = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/privatelink.servicebus.windows.net"
     }
   }
+  non_null_purview_private_endpoints = { for key, value in local.purview_private_endpoints : key => value if value.resource_id != null }
+
+  ssptl_vnet_name           = local.is_sbox ? "ss-ptlsbox-vnet" : "ss-ptl-vnet"
+  ssptl_vnet_resource_group = local.is_sbox ? "ss-ptlsbox-network-rg" : "ss-ptl-network-rg"
+}
+
+data "azurerm_subnet" "ssptl-00" {
+  provider             = azurerm.ssptl
+  name                 = "aks-00"
+  virtual_network_name = local.ssptl_vnet_name
+  resource_group_name  = local.ssptl_vnet_resource_group
+}
+
+data "azurerm_subnet" "ssptl-01" {
+  provider             = azurerm.ssptl
+  name                 = "aks-01"
+  virtual_network_name = local.ssptl_vnet_name
+  resource_group_name  = local.ssptl_vnet_resource_group
 }

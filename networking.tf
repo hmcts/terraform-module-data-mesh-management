@@ -1,42 +1,62 @@
-resource "azurerm_route_table" "this" {
-  name                = "${local.name}-routetable-${var.env}"
-  location            = local.location
-  resource_group_name = local.resource_group
-  tags                = var.common_tags
-}
+module "networking" {
+  source = "github.com/hmcts/terraform-module-azure-virtual-networking?ref=main"
 
-resource "azurerm_route" "default" {
-  name                   = "default"
-  address_prefix         = "0.0.0.0/0"
-  next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = var.default_route_next_hop_ip
-  route_table_name       = azurerm_route_table.this.name
-  resource_group_name    = local.resource_group
-}
+  env                          = var.env
+  product                      = "data-landing"
+  common_tags                  = var.common_tags
+  component                    = "networking"
+  name                         = local.name
+  location                     = var.location
+  existing_resource_group_name = local.resource_group
 
-resource "azurerm_network_security_group" "this" {
-  name                = "${local.name}-nsg-${var.env}"
-  location            = local.location
-  resource_group_name = local.resource_group
-  tags                = var.common_tags
-}
+  vnets = {
+    vnet = {
+      address_space = var.address_space
+      subnets       = local.merged_subnets
+    }
+  }
 
-resource "azurerm_virtual_network" "this" {
-  name                = "${local.name}-vnet-${var.env}"
-  location            = local.location
-  resource_group_name = local.resource_group
-  address_space       = var.address_space
-  dns_servers         = var.dns_servers
+  route_tables = {
+    rt = {
+      subnets = local.subnet_keys
+      routes = {
+        default = {
+          address_prefix         = "0.0.0.0/0"
+          next_hop_type          = "VirtualAppliance"
+          next_hop_in_ip_address = var.default_route_next_hop_ip
+        }
+      }
+    }
+  }
 
-  tags = var.common_tags
+  network_security_groups = {
+    nsg = {
+      subnets = local.subnet_keys
+      rules = {
+        "Allow_SDS_PTL_ADO_Agents" = {
+          priority                     = 4000
+          direction                    = "Inbound"
+          access                       = "Allow"
+          protocol                     = "*"
+          source_port_range            = "*"
+          destination_port_range       = "*"
+          source_address_prefixes      = concat(data.azurerm_subnet.ssptl-00.address_prefixes, data.azurerm_subnet.ssptl-01.address_prefixes)
+          destination_address_prefixes = var.address_space
+          description                  = "Allow ADO agents to communicate with DLRM data ingest landing zone resources."
+        }
+      }
+    }
+  }
 }
 
 module "vnet_peer_hub" {
   source = "github.com/hmcts/terraform-module-vnet-peering?ref=feat%2Ftweak-to-enable-planning-in-a-clean-env"
   peerings = {
     source = {
-      name    = "${local.name}-vnet-${var.env}-to-hub"
-      vnet_id = azurerm_virtual_network.this.id
+      name           = "${local.name}-vnet-${var.env}-to-hub"
+      vnet_id        = "/subscriptions/${data.azurerm_subscription.current.subscription_id}/resourceGroups/${module.networking.resource_group_name}/providers/Microsoft.Network/virtualNetworks/${module.networking.vnet_names["vnet"]}"
+      vnet           = module.networking.vnet_names["vnet"]
+      resource_group = module.networking.resource_group_name
     }
     target = {
       name           = "hub-to-${local.name}-vnet-${var.env}"
@@ -48,25 +68,5 @@ module "vnet_peer_hub" {
   providers = {
     azurerm.initiator = azurerm
     azurerm.target    = azurerm.hub
-  }
-}
-
-resource "azurerm_subnet" "this" {
-  for_each             = merge(local.subnets, var.additional_subnets)
-  name                 = each.key
-  resource_group_name  = local.resource_group
-  virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = each.value.address_prefixes
-  service_endpoints    = each.value.service_endpoints
-
-  dynamic "delegation" {
-    for_each = each.value.delegations != null ? each.value.delegations : {}
-    content {
-      name = delegation.key
-      service_delegation {
-        name    = delegation.value.service_name
-        actions = delegation.value.actions
-      }
-    }
   }
 }

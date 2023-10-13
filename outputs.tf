@@ -8,18 +8,18 @@ output "location" {
   description = "The Azure region the data management zone has been deployed to."
 }
 
-output "virtual_network_name" {
-  value       = azurerm_virtual_network.this.name
+output "virtual_network_names" {
+  value       = module.networking.vnet_names
   description = "The name of the virtual network deployed for the data managaement zone."
 }
 
-output "virtual_network_id" {
-  value       = azurerm_virtual_network.this.id
+output "virtual_network_ids" {
+  value       = module.networking.vnet_ids
   description = "The ID of the virtual network deployed for the data managaement zone."
 }
 
 output "subnet_ids" {
-  value       = values(azurerm_subnet.this)[*].id
+  value       = module.networking.subnet_ids
   description = "The IDs of the subnets deployed for the data managaement zone."
 }
 
@@ -29,16 +29,16 @@ output "key_vault_id" {
 }
 
 output "purview_id" {
-  value       = azurerm_purview_account.this[0].id
+  value       = var.existing_purview_account == null ? azurerm_purview_account.this[0].id : var.existing_purview_account.resource_id
   description = "The ID of the purview account deployed for the data managaement zone."
 }
 
 output "purview_managed_storage_id" {
-  value       = azurerm_purview_account.this[0].managed_resources[0].storage_account_id
+  value       = var.existing_purview_account == null ? azurerm_purview_account.this[0].managed_resources[0].storage_account_id : var.existing_purview_account.managed_storage_account_id
   description = "The ID of the purview managed storage account deployed for the data managaement zone."
 }
 
 output "purview_managed_event_hub_id" {
-  value       = azurerm_purview_account.this[0].managed_resources[0].event_hub_namespace_id
+  value       = var.existing_purview_account == null ? azurerm_purview_account.this[0].managed_resources[0].event_hub_namespace_id : var.existing_purview_account.managed_event_hub_namespace_id
   description = "The ID of the purview managed event hub deployed for the data managaement zone."
 }
