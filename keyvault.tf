@@ -1,5 +1,5 @@
 module "key_vault" {
-  source              = "github.com/hmcts/cnp-module-key-vault?ref=master"
+  source              = "github.com/hmcts/cnp-module-key-vault?ref=feat%2Fignore_metric_changes"
   name                = "${local.name}-kv-${var.env}"
   product             = "data-mgmt-zone"
   env                 = var.env
