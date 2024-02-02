@@ -61,8 +61,8 @@ module "data_mgmt_zone" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | >= 3.74.0 |
-| <a name="provider_azurerm.ssptl"></a> [azurerm.ssptl](#provider\_azurerm.ssptl) | >= 3.74.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.75.0 |
+| <a name="provider_azurerm.ssptl"></a> [azurerm.ssptl](#provider\_azurerm.ssptl) | 3.75.0 |
 
 ## Modules
 
@@ -76,6 +76,7 @@ module "data_mgmt_zone" {
 
 | Name | Type |
 |------|------|
+| [azurerm_key_vault_access_policy.additional_policies](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_key_vault_access_policy.purview](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/key_vault_access_policy) | resource |
 | [azurerm_private_endpoint.kv_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
 | [azurerm_private_endpoint.purview_endpoint](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/private_endpoint) | resource |
@@ -95,6 +96,7 @@ module "data_mgmt_zone" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_additional_kv_access_policies"></a> [additional\_kv\_access\_policies](#input\_additional\_kv\_access\_policies) | Additional access policies to add to the key vault | <pre>list(object({<br>    object_id               = string<br>    secret_permissions      = optional(list(string), [])<br>    certificate_permissions = optional(list(string), [])<br>    key_permissions         = optional(list(string), [])<br>  }))</pre> | `[]` | no |
 | <a name="input_additional_subnets"></a> [additional\_subnets](#input\_additional\_subnets) | This module by default deploys a 'services' subnet with the address space of the virtual network. If you need additional subnets, you can specify them here. | <pre>map(object({<br>    address_prefixes  = list(string),<br>    service_endpoints = optional(list(string), []),<br>    delegations = optional(map(object({<br>      service_name = string,<br>      actions      = optional(list(string), [])<br>    })))<br>  }))</pre> | `{}` | no |
 | <a name="input_address_space"></a> [address\_space](#input\_address\_space) | The address space covered by the virtual network. | `list(string)` | n/a | yes |
 | <a name="input_common_tags"></a> [common\_tags](#input\_common\_tags) | Common tag to be applied to resources | `map(string)` | n/a | yes |
