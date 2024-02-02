@@ -41,7 +41,7 @@ resource "azurerm_key_vault_access_policy" "purview" {
 resource "azurerm_key_vault_access_policy" "additional_policies" {
   for_each                = var.additional_kv_access_policies
   key_vault_id            = module.key_vault.key_vault_id
-  tenant_id               = data.azurerm_client_config.current.client_id
+  tenant_id               = data.azurerm_client_config.current.tenant_id
   object_id               = each.key
   key_permissions         = each.value.key_permissions
   secret_permissions      = each.value.secret_permissions
