@@ -64,8 +64,7 @@ variable "existing_purview_account" {
 
 variable "additional_kv_access_policies" {
   description = "Additional access policies to add to the key vault"
-  type = list(object({
-    object_id               = string
+  type = map(object({
     secret_permissions      = optional(list(string), [])
     certificate_permissions = optional(list(string), [])
     key_permissions         = optional(list(string), [])
