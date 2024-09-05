@@ -30,7 +30,6 @@ variable "hub_resource_group_name" {
 
 #Event Hub
 
-variable "eventhub_name" {}
 variable "eventhub_ns_sku" {}
-variable "paas_services" {}
+variable "services" {}
 variable "message_retention" {}
