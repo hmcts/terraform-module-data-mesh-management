@@ -31,9 +31,6 @@ variable "hub_resource_group_name" {
 #Event Hub
 
 variable "eventhub_name" {}
-variable "eventhub_rg" {}
 variable "eventhub_ns_sku" {}
 variable "paas_services" {}
-variable "endpoint_name" {}
-variable "subnet_id" {}
 variable "message_retention" {}

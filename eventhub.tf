@@ -1,7 +1,7 @@
 resource "azurerm_eventhub_namespace" "eventhub-namespace" {
   name                = var.eventhub_name
   location            = var.location
-  resource_group_name = var.eventhub_rg
+  resource_group_name = var.hub_resource_group_name
   sku                 = var.eventhub_ns_sku
   tags                = var.common_tags
 }
@@ -15,10 +15,10 @@ resource "azurerm_eventhub" "paas_eventhub" {
   message_retention   = var.message_retention
 }
 
-resource "azurerm_eventhub_namespace_authorization_rule" "soc-eventhub-sender" {
+resource "azurerm_eventhub_namespace_authorization_rule" "eventhub-sender" {
   name                = "dlrm-eventhub-namespace-sender"
   namespace_name      = azurerm_eventhub_namespace.eventhub-namespace.name
-  resource_group_name = var.eventhub_rg
+  resource_group_name = var.hub_resource_group_name
 
   listen = false
   send   = true
