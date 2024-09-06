@@ -12,7 +12,7 @@ resource "azurerm_eventhub_namespace" "eventhub-namespace" {
 }
 
 resource "azurerm_eventhub" "eventhub" {
-  for_each            = var.env == "stg" ? {} : toset(var.services)
+  for_each            = var.env == "stg" ? toset([]) : toset(var.services)
   name                = each.key
   namespace_name      = azurerm_eventhub_namespace.eventhub-namespace.name
   resource_group_name = local.resource_group
