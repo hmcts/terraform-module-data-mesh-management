@@ -1,5 +1,5 @@
 locals {
-  eventhub_ns_sku = var.env == "stg" ? null : var.eventhub_ns_sku
+  services_map = var.env == "stg" ? {} : tomap({ for s in var.services : s => s })
 }
 
 resource "azurerm_eventhub_namespace" "eventhub-namespace" {
@@ -12,8 +12,7 @@ resource "azurerm_eventhub_namespace" "eventhub-namespace" {
 }
 
 resource "azurerm_eventhub" "eventhub" {
-  count               = var.env == "stg" ? 0 : length(var.services)
-  for_each            = var.env == "stg" ? toset([]) : toset(var.services)
+  for_each            = local.services_map
   name                = each.key
   namespace_name      = azurerm_eventhub_namespace.eventhub-namespace.name
   resource_group_name = local.resource_group
