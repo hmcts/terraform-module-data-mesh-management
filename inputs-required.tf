@@ -27,3 +27,22 @@ variable "hub_resource_group_name" {
   description = "The name of the resource group containing the HUB virtual network."
   type        = string
 }
+
+#Event Hub
+
+variable "eventhub_ns_sku" {
+  description = "Event Hub Namespace SKU"
+  type = string
+  default = null
+}
+
+variable "services" {
+  description = "List of services to create Eventhubs in the namespace"
+  type = list(string)
+  default = [ ]
+}
+variable "message_retention" {
+  description = "Message retention value"
+  type = string
+  default = null
+}
