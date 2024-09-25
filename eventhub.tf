@@ -4,6 +4,7 @@ resource "azurerm_eventhub_namespace" "eventhub-namespace" {
   resource_group_name = local.resource_group
   sku                 = var.eventhub_ns_sku
   tags                = var.common_tags
+  zone_redundant      = var.zone_redundant
 }
 
 resource "azurerm_eventhub" "eventhub" {
@@ -19,7 +20,7 @@ resource "azurerm_eventhub_namespace_authorization_rule" "eventhub-sender" {
   name                = "dlrm-eventhub-namespace-sender"
   namespace_name      = azurerm_eventhub_namespace.eventhub-namespace.name
   resource_group_name = local.resource_group
-  listen = false
-  send   = true
-  manage = false
+  listen              = false
+  send                = true
+  manage              = false
 }
