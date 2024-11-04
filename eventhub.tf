@@ -4,7 +4,6 @@ resource "azurerm_eventhub_namespace" "eventhub-namespace" {
   resource_group_name = local.resource_group
   sku                 = var.eventhub_ns_sku
   tags                = var.common_tags
-  zone_redundant      = var.zone_redundant
 }
 
 resource "azurerm_eventhub" "eventhub" {
