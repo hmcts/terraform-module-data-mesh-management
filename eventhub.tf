@@ -5,6 +5,7 @@ resource "azurerm_eventhub_namespace" "eventhub-namespace" {
   sku                 = var.eventhub_ns_sku
   tags                = var.common_tags
   zone_redundant      = var.zone_redundant
+  capacity            = var.eventhub_capacity
 }
 
 resource "azurerm_eventhub" "eventhub" {

@@ -77,3 +77,9 @@ variable "zone_redundant" {
   default     = false
   description = "Allows you to make eventhub namespace zone reduntdant"
 }
+
+variable "eventhub_capacity" {
+  type        = number
+  default     = 1
+  description = "The capacity of the eventhub namespace"
+}

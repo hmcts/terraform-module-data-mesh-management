@@ -32,14 +32,14 @@ variable "hub_resource_group_name" {
 
 variable "eventhub_ns_sku" {
   description = "Event Hub Namespace SKU"
-  type = string
+  type        = string
 }
 
 variable "services" {
   description = "List of services to create Eventhubs in the namespace"
-  type = list(string)
+  type        = list(string)
 }
 variable "message_retention" {
   description = "Message retention value"
-  type = string
+  type        = string
 }
